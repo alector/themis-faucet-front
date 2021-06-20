@@ -2,9 +2,9 @@ import React from "react"
 import { useEffect } from "react"
 
 const FaucetBtn = ({ isLoading, text, loadingText }) => {
-  useEffect(() => {
-    console.log("isLoaded inside FaucetBtn", isLoading)
-  }, [isLoading])
+  // useEffect(() => {
+  //   console.log("isLoaded inside FaucetBtn", isLoading)
+  // }, [isLoading])
 
   return (
     <>

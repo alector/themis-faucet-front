@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 import { Web3Context } from "web3-hooks"
 
-function useCoinRead({ coin }) {
+const useCoinRead = ({ coin }) => {
   const [web3State] = useContext(Web3Context)
   const [isLoading, setIsLoading] = useState(false)
   const [coinTotalSupply, setTotalSupply] = useState(0)
