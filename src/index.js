@@ -5,14 +5,17 @@ import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import ContextWrapper from "./context/ContextWrapper"
 import { Web3Provider } from "web3-hooks"
+import { ChakraProvider } from "@chakra-ui/react"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Web3Provider>
-      <ContextWrapper>
-        <App />
-      </ContextWrapper>
-    </Web3Provider>
+    <ChakraProvider>
+      <Web3Provider>
+        <ContextWrapper>
+          <App />
+        </ContextWrapper>
+      </Web3Provider>
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById("root")
 )

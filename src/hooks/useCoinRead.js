@@ -1,22 +1,22 @@
 import { useState, useEffect, useContext } from "react"
 import { Web3Context } from "web3-hooks"
 
-function useCoinRead({ coinContract }) {
+function useCoinRead({ coin }) {
   const [web3State] = useContext(Web3Context)
   const [isLoading, setIsLoading] = useState(false)
-  const [totalSupply, setTotalSupply] = useState(0)
-  const [owner, setOwner] = useState(0)
+  const [coinTotalSupply, setTotalSupply] = useState(0)
+  const [coinOwner, setOwner] = useState(0)
 
   useEffect(() => {
-    if (coinContract) {
+    if (coin) {
       const getCoinState = async () => {
         try {
           setIsLoading(true)
 
-          let coinOwner = await coinContract.owner()
+          let coinOwner = await coin.owner()
           setOwner(prev => coinOwner)
 
-          let total = await coinContract.totalSupply()
+          let total = await coin.totalSupply()
           setTotalSupply(prev => total.toString())
 
           // let myTokenBalance = await coin.balanceOf(web3State.account)
@@ -29,9 +29,9 @@ function useCoinRead({ coinContract }) {
       }
       getCoinState()
     }
-  }, [coinContract, web3State.account])
+  }, [coin, web3State.account])
 
-  return { isLoading, owner, totalSupply }
+  return { isLoading, coinOwner, coinTotalSupply }
 }
 
 export default useCoinRead
