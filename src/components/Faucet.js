@@ -1,40 +1,96 @@
 import React from "react"
-import { useState, useContext } from "react"
+import { useState, useContext, useCallback } from "react"
 import { Web3Context } from "web3-hooks"
+import { contextCoin } from "../context/ContextWrapper"
+import { ethers } from "ethers"
 
 import { contextIco } from "../context/ContextWrapper"
 import { Alert, AlertIcon, Input, Button, Flex, Spacer, Heading, Text, HStack, Spinner, useToast, useDisclosure } from "@chakra-ui/react"
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
 import FaucetBtn from "./FaucetBtn"
 import useContractTransaction from "../hooks/useContractTransaction"
+import useContractTransaction2 from "../hooks/useContractTransaction_v2"
+import useCoinRead from "../hooks/useCoinRead"
 
 const Faucet = () => {
+  const coin = useContext(contextCoin)
+  const { coinAddress } = useCoinRead({ coin })
+
   const [txTrigger, setTrigger] = useState(0)
   const [txLoading, setTxLoading] = useState(false)
 
   const [web3State, login] = useContext(Web3Context)
   const contractICO = useContext(contextIco)
   const [promise, setPromise] = useState(null)
-  let isLoading
-  // const toast = useToast()
-  // const [isLoading] = useCoinTransaction(txTrigger, contractICO, "faucetCoin")
+  const [promise2, setPromise2] = useState(null)
+  const [promise3, setPromise3] = useState(null)
 
-  const { Loading, value } = useContractTransaction(promise)
+  /* ethers
+            ethers.utils.formatEther(b.toString()),
+`${owner} approved ${spender} for ${ethers.utils.formatEther(
+            amount.toString()
+  */
+
+  const [Loading1] = useContractTransaction({ promise: promise, message: "We faucet a coin" })
+
+  const [Loading2] = useContractTransaction2({ promise: promise2, message: "We faucet a coin" })
+
+  const [Loading3] = useContractTransaction2({ promise: promise3, message: "1 Gwei was just transfered to an account" })
+
   // console.log("this is myLoading", myLoading)
   // setTxLoading(myLoading)
 
   const handleClickFaucet = () => {
     if (contractICO) {
       setPromise(contractICO.faucetCoin())
+      console.log("hello")
     }
-
-    // setTrigger(prev => 1)
-    // setTrigger(0)
-
-    // const [isLoading] = useCoinTransaction(txTrigger, contractICO, "faucetCoin")
   }
 
-  // const handleClickSetStorage = async () => {
+  const handleClickFaucet2 = () => {
+    if (contractICO) {
+      setPromise2(prev => contractICO.faucetCoin())
+    }
+  }
+
+  const handleTest = async () => {
+    if (contractICO) {
+      try {
+        const weiValue = ethers.utils.formatEther("1000000000")
+        const etherValue = ethers.utils.parseEther(weiValue)
+
+        const tx = await web3State.signer.sendTransaction({
+          to: "0x586DFCa72e32f1b5382624A689fe6078E65166F3",
+          value: etherValue
+        })
+        await tx.wait()
+      } catch (e) {
+        console.log(e.message)
+      }
+    }
+  }
+
+  const handleTransferEther = async () => {
+    const weiValue = ethers.utils.formatEther("1000000000")
+    const etherValue = ethers.utils.parseEther(weiValue)
+
+    if (contractICO) {
+      setPromise3(prev =>
+        web3State.signer.sendTransaction({
+          to: "0x586DFCa72e32f1b5382624A689fe6078E65166F3",
+          value: etherValue
+        })
+      )
+    }
+  }
+
+  // const handleClickFaucet2 = useCallback(() => {
+  //   if (contractICO) {
+  //     setProm(contractICO.faucetCoin())
+  //   }
+  // }, [prom])
+
+  // const handleClickFaucet = async () => {
   //   try {
   //     setIsLoading(true)
   //     let tx = await contractICO.faucetCoin()
@@ -72,11 +128,17 @@ const Faucet = () => {
   // }
   return (
     <>
+      <p>is Loading {Loading1 ? "yes" : "no"}</p>
       <div className="w-full" onClick={handleClickFaucet}>
-        <p>loading: {Loading ? "Loading" : "Not Loading"}</p>
-        <p>Value: {value}</p>
+        <FaucetBtn isLoading={Loading1} text="Faucet 1 coin" loadingText="A coin is transfered..." />
+      </div>
 
-        <FaucetBtn isLoading={Loading} text="Faucet 1 coin" loadingText="A coin is transfered..." />
+      <div className="w-full" onClick={handleClickFaucet2}>
+        <FaucetBtn isLoading={Loading2} text="Faucet 1 coin (second hook)" loadingText="A coin is transfered..." />
+      </div>
+
+      <div className="w-full" onClick={handleTransferEther}>
+        <FaucetBtn isLoading={Loading3} text="Donate 1 Gwei to 0x586..." loadingText="A coin is transfered..." />
       </div>
     </>
   )

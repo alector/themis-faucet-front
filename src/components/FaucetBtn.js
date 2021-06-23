@@ -9,17 +9,22 @@ const FaucetBtn = ({ isLoading, text, loadingText }) => {
   return (
     <>
       <div className="w-full p-8 flex flex-col justify-center items-center ">
-        {isLoading && (
+        {!isLoading && (
           <>
-            <div className=" animate-ping h-6 w-6 rounded-full bg-blue-500 mb-4 "></div>
-            <button className="w-1/2 p-4 bg-blue-100 text-white rounded-md w-50">{loadingText}</button>
+            <button className="flex h-12 items-center  w-1/2 p-2 bg-blue-500 text-white rounded-md ">
+              <div className=" h-6 w-6 rounded-full bg-blue-200 "></div>
+              <div className="pl-5  flex items-center">{text}</div>
+            </button>
           </>
         )}
 
-        {!isLoading && (
+        {isLoading && (
           <>
-            <div className=" h-6 w-6 rounded-full bg-blue-500 mb-4 bg-opacity-0"></div>
-            <button className="w-1/2 p-4 bg-blue-400 text-white rounded-md">{text}</button>
+            <button className="flex h-12 items-center  w-1/2 p-2 bg-blue-300 text-white rounded-md">
+              <div className=" animate-ping h-6 w-6 rounded-full bg-blue-200 "></div>
+
+              <div className="pl-5  flex items-center">{loadingText}</div>
+            </button>
           </>
         )}
       </div>

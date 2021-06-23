@@ -6,7 +6,7 @@ const useCoinRead = ({ coin }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [coinTotalSupply, setTotalSupply] = useState(0)
   const [coinOwner, setOwner] = useState(0)
-
+  const [coinAddress, setCoinAddress] = useState(0)
   useEffect(() => {
     if (coin) {
       const getCoinState = async () => {
@@ -18,6 +18,9 @@ const useCoinRead = ({ coin }) => {
 
           let total = await coin.totalSupply()
           setTotalSupply(prev => total.toString())
+
+          let coinAddress = await coin.address
+          setCoinAddress(prev => coinAddress)
 
           // let myTokenBalance = await coin.balanceOf(web3State.account)
           // setTokenBalance(prev => myTokenBalance)
@@ -31,7 +34,7 @@ const useCoinRead = ({ coin }) => {
     }
   }, [coin, web3State.account])
 
-  return { isLoading, coinOwner, coinTotalSupply }
+  return { isLoading, coinOwner, coinTotalSupply, coinAddress }
 }
 
 export default useCoinRead

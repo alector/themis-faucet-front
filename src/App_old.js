@@ -1,8 +1,8 @@
 import "./App.css"
 // import ContextWrapper from "./context/ContextWrapper"
 import { Web3Context } from "web3-hooks"
-import { useContext } from "react"
-import Coin from "./components/Coin"
+import { useContext, useState } from "react"
+// import Coin from "./components/Coin"
 
 function App() {
   const [web3State, login] = useContext(Web3Context)
@@ -52,9 +52,9 @@ function App() {
       </div>
 
       {web3State.isLogged && (
-        <section className=" bg-gray-100 flex flex-col justify-center items-center">
+        <section className="h-screen bg-gray-100 flex flex-col justify-center items-center">
           <p>blabla</p>
-          <Coin />
+          {/* <Coin /> */}
         </section>
       )}
     </div>
