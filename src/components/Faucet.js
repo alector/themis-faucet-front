@@ -1,29 +1,28 @@
 import React from "react"
 import { useState, useContext, useCallback } from "react"
 import { Web3Context } from "web3-hooks"
-import { contextCoin } from "../context/ContextWrapper"
+import { contextCoin, contextIco } from "../context/ContextWrapper"
 import { ethers } from "ethers"
 
-import { contextIco } from "../context/ContextWrapper"
-import { Alert, AlertIcon, Input, Button, Flex, Spacer, Heading, Text, HStack, Spinner, useToast, useDisclosure } from "@chakra-ui/react"
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
+// import { Alert, AlertIcon, Input, Button, Flex, Spacer, Heading, Text, HStack, Spinner, useToast, useDisclosure } from "@chakra-ui/react"
+// import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react"
 import FaucetBtn from "./FaucetBtn"
 import useContractTransaction from "../hooks/useContractTransaction"
-import useContractTransaction2 from "../hooks/useContractTransaction_v2"
+
 import useCoinRead from "../hooks/useCoinRead"
 
 const Faucet = () => {
   const coin = useContext(contextCoin)
-  const { coinAddress } = useCoinRead({ coin })
+  const ico = useContext(contextIco)
 
-  const [txTrigger, setTrigger] = useState(0)
-  const [txLoading, setTxLoading] = useState(false)
+  const { coinAddress } = useCoinRead({ coin })
 
   const [web3State, login] = useContext(Web3Context)
   const contractICO = useContext(contextIco)
-  const [promise, setPromise] = useState(null)
-  const [promise2, setPromise2] = useState(null)
-  const [promise3, setPromise3] = useState(null)
+  // const [promise, setPromise] = useState(null)
+  // const [promise2, setPromise2] = useState(null)
+  // const [promise3, setPromise3] = useState(null)
+  // const [promise4, setPromise4] = useState(null)
 
   /* ethers
             ethers.utils.formatEther(b.toString()),
@@ -31,29 +30,13 @@ const Faucet = () => {
             amount.toString()
   */
 
-  const [Loading1] = useContractTransaction({ promise: promise, message: "We faucet a coin" })
+  const [LoadingBuy, setBuyPromise] = useContractTransaction("1 Gwei was just transfered to an account")
 
-  const [Loading2] = useContractTransaction2({ promise: promise2, message: "We faucet a coin" })
+  const [LoadingTransfer, setTransferPromise] = useContractTransaction("1 Gwei was transfered to an buy a coin")
 
-  const [Loading3] = useContractTransaction2({ promise: promise3, message: "1 Gwei was just transfered to an account" })
+  const [LoadingFaucet, setPromiseFaucet] = useContractTransaction("new hook for faucet")
 
-  // console.log("this is myLoading", myLoading)
-  // setTxLoading(myLoading)
-
-  const handleClickFaucet = () => {
-    if (contractICO) {
-      setPromise(contractICO.faucetCoin())
-      console.log("hello")
-    }
-  }
-
-  const handleClickFaucet2 = () => {
-    if (contractICO) {
-      setPromise2(prev => contractICO.faucetCoin())
-    }
-  }
-
-  const handleTest = async () => {
+  const handleTest1 = async () => {
     if (contractICO) {
       try {
         const weiValue = ethers.utils.formatEther("1000000000")
@@ -70,12 +53,34 @@ const Faucet = () => {
     }
   }
 
+  const handleTest2 = async () => {
+    if (contractICO) {
+      try {
+        const weiValue = ethers.utils.formatEther("1000000000")
+        const etherValue = ethers.utils.parseEther(weiValue)
+
+        const tx = await ico.buyTokens({
+          value: etherValue,
+          gasLimit: "1000000"
+        })
+        await tx.wait()
+      } catch (e) {
+        console.log(e.message)
+      }
+    }
+  }
+
+  const handleFaucet = () => {
+    if (contractICO) {
+      setPromiseFaucet(prev => contractICO.faucetCoin())
+    }
+  }
   const handleTransferEther = async () => {
     const weiValue = ethers.utils.formatEther("1000000000")
     const etherValue = ethers.utils.parseEther(weiValue)
 
     if (contractICO) {
-      setPromise3(prev =>
+      setTransferPromise(prev =>
         web3State.signer.sendTransaction({
           to: "0x586DFCa72e32f1b5382624A689fe6078E65166F3",
           value: etherValue
@@ -84,61 +89,34 @@ const Faucet = () => {
     }
   }
 
-  // const handleClickFaucet2 = useCallback(() => {
-  //   if (contractICO) {
-  //     setProm(contractICO.faucetCoin())
-  //   }
-  // }, [prom])
+  const handleBuyCoin = async () => {
+    const weiValue = ethers.utils.formatEther("1000000000")
+    const etherValue = ethers.utils.parseEther(weiValue)
+    console.log("coinAddress", coinAddress)
+    console.log("etherValue", weiValue)
 
-  // const handleClickFaucet = async () => {
-  //   try {
-  //     setIsLoading(true)
-  //     let tx = await contractICO.faucetCoin()
-  //     await tx.wait()
-  //     setIsLoading(false)
-  //     toast({
-  //       title: "Confirmed transaction",
-  //       description: `We faucet one Coin. \nTransaction hash: ${tx.hash}`,
-  //       status: "success",
-  //       duration: 9000,
-  //       isClosable: true
-  //     })
-  //   } catch (e) {
-  //     setIsLoading(false)
-  //     if (e.code === 4001) {
-  //       toast({
-  //         title: "Transaction signature denied",
-  //         description: "You denied transaction signature.",
-  //         status: "error",
-  //         duration: 9000,
-  //         isClosable: true
-  //       })
-  //     }
-  //     console.log(e)
-  //   }
-  // }
+    if (contractICO) {
+      setBuyPromise(prev =>
+        ico.buyTokens({
+          value: etherValue
+          // gasLimit: "1000000"
+        })
+      )
+    }
+  }
 
-  // const handleClick = () => {
-  //   console.log("CLICKED BTN!!!")
-  //   // setLoading(prev => !prev)
-  //   setIsLoading(prev => true)
-  //   setTimeout(() => {
-  //     setIsLoading(prev => false)
-  //   }, 2000)
-  // }
   return (
     <>
-      <p>is Loading {Loading1 ? "yes" : "no"}</p>
-      <div className="w-full" onClick={handleClickFaucet}>
-        <FaucetBtn isLoading={Loading1} text="Faucet 1 coin" loadingText="A coin is transfered..." />
-      </div>
-
-      <div className="w-full" onClick={handleClickFaucet2}>
-        <FaucetBtn isLoading={Loading2} text="Faucet 1 coin (second hook)" loadingText="A coin is transfered..." />
+      <div className="w-full" onClick={handleFaucet}>
+        <FaucetBtn isLoading={LoadingFaucet} text="Faucet 1 coin" loadingText="A coin is transfered..." />
       </div>
 
       <div className="w-full" onClick={handleTransferEther}>
-        <FaucetBtn isLoading={Loading3} text="Donate 1 Gwei to 0x586..." loadingText="A coin is transfered..." />
+        <FaucetBtn isLoading={LoadingTransfer} text="Donate 1 Gwei to 0x586..." loadingText="A coin is transfered..." />
+      </div>
+
+      <div className="w-full" onClick={handleBuyCoin}>
+        <FaucetBtn isLoading={LoadingBuy} text="Buy 1 Token..." loadingText="A coin is bought..." />
       </div>
     </>
   )

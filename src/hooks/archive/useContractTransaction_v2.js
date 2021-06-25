@@ -55,17 +55,6 @@ const useContractTransaction2 = ({ promise, message }) => {
   // )
 
   const setTransaction = async (promise, message) => {
-    if (toast) {
-      console.log("=========> Toast is yummy...")
-    } else {
-      console.log("=========> What is toast?")
-    }
-
-    if (setTxLoading) {
-      console.log("=====> setTxLoading exists")
-      console.log("txLoading before Try", txLoading)
-    }
-
     try {
       setTxLoading(prev => true)
 
@@ -84,6 +73,7 @@ const useContractTransaction2 = ({ promise, message }) => {
         isClosable: true
       })
     } catch (e) {
+      console.log(e.message)
       setTxLoading(prev => false)
 
       if (e.code === 4001) {
@@ -99,9 +89,9 @@ const useContractTransaction2 = ({ promise, message }) => {
     }
   }
 
-  useEffect(() => {
-    console.log(">>>> audomatic print:", txLoading)
-  }, [txLoading])
+  // useEffect(() => {
+  //   console.log(">>>> audomatic print:", txLoading)
+  // }, [txLoading])
 
   useEffect(() => {
     if (promise) {

@@ -14,7 +14,7 @@ const Coin = () => {
   const coin = useContext(contextCoin)
 
   // find all read-only state properties (without need of enquiry)
-  const { coinOwner, coinTotalSupply, coinAddress } = useCoinRead({ coin })
+  const { coinOwner, coinTotalSupply, coinAddress, signerBalance, contractBalance } = useCoinRead({ coin })
 
   // Inquiry coin state for balanceOf or alowance
   const [inquiryLoading, myTokenBalance] = useCoinInquiry(coin, "balanceOf", [web3State.account])
@@ -38,6 +38,8 @@ const Coin = () => {
       <div>Coin owner is {coinOwner} </div>
       <div>Coin Total supply is {coinTotalSupply} </div>
       <div>Coin address {coinAddress} </div>
+      <div>Contract balance {contractBalance} </div>
+      <div>Signer balance {signerBalance} </div>
 
       <button className="p-5 bg-red-500 text-white" onClick={handleToast}>
         Simple Toast

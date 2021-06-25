@@ -1,4 +1,4 @@
-export const ThemisCoinAddress = "0xE1BEE21cBa45Ebdc892FE9e535F8EDA47e0293F0"
+export const ThemisCoinAddress = "0x761d2A88651E3692636796286FB5689EF5A27b1a"
 export const ThemisCoinAbi = [
   {
     inputs: [

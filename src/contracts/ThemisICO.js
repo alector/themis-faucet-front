@@ -1,16 +1,16 @@
-export const ThemisIcoAddress = "0x9A06FE5e243A4AA527453E0bf4bAe6b7BA3F9D9d"
+export const ThemisIcoAddress = "0x7feA01C66431F8757F8a7eD59dA47b46379607E1"
 
 export const ThemisIcoAbi = [
   {
     inputs: [
       {
         internalType: "address",
-        name: "ownerICO_",
+        name: "ownerICO",
         type: "address"
       },
       {
         internalType: "address",
-        name: "coinAddress_",
+        name: "coinAddress",
         type: "address"
       }
     ],
@@ -34,25 +34,6 @@ export const ThemisIcoAbi = [
       }
     ],
     name: "Deposit",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "recipient",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      }
-    ],
-    name: "Faucet",
     type: "event"
   },
   {
@@ -254,13 +235,6 @@ export const ThemisIcoAbi = [
   {
     inputs: [],
     name: "unpause",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "withdrawEther",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
